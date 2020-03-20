@@ -16,6 +16,7 @@ module AhoyEmail
       track_open if options[:open]
       track_open_ga if options[:google_analytics_code]
       track_links if options[:utm_params] || options[:click]
+      track_special_links if options[:special_links]
       track_message
     end
 
@@ -141,6 +142,23 @@ module AhoyEmail
               url: link['href'],
               signature: signature
             )
+        end
+
+        # hacky
+        body.raw_source.sub!(body.raw_source, doc.to_s)
+      end
+    end
+
+    def track_special_links
+      if html_part?
+        body = (message.html_part || message).body
+
+        doc = Nokogiri::HTML(body.raw_source)
+        doc.css('a[href]').each do |link|
+          uri = parse_uri(link['href'])
+          next unless trackable?(uri)
+
+          link['href'] = link['href'].gsub("{{MSGTOKEN}}", token)
         end
 
         # hacky
