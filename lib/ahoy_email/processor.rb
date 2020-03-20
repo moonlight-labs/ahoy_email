@@ -158,7 +158,7 @@ module AhoyEmail
           uri = parse_uri(link['href'])
           next unless trackable?(uri)
 
-          link['href'] = link['href'].gsub("{{MSGTOKEN}}", token)
+          link['href'] = link['href'].gsub("%7B%7BMSGTOKEN%7D%7D", token)
         end
 
         # hacky

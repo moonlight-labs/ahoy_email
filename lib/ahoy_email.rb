@@ -34,7 +34,8 @@ module AhoyEmail
     url_options: {},
     extra: {},
     unsubscribe_links: false,
-    google_analytics_code: nil
+    google_analytics_code: nil,
+    special_links: false
   }
 
   self.track_method = lambda do |data|
